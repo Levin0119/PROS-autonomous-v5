@@ -260,13 +260,22 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
+    // claw control button R1/R2
     if (master.get_digital(DIGITAL_R1)) {
      intake.move(30);
-  } else if (master.get_digital(DIGITAL_R2)) {
+    } else if (master.get_digital(DIGITAL_R2)) {
      intake.move(-30);
-  } else {
+    } else {
      intake.move(0);
-  }
+    }
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
-  }
+    // lift control button up/down
+    if (master.get_digital(DIGITAL_UP)) {
+      intake.move(127);
+    } else if (master.get_digital(DIGITAL_DOWN)) {
+      intake.move(-127);
+    } else {
+      intake.move(0);
+    }
+    }
 }
