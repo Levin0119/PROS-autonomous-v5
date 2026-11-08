@@ -271,11 +271,11 @@ void opcontrol() {
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     // lift control button up/down
     if (master.get_digital(DIGITAL_UP)) {
-      intake.move(127);
+      lift.move(127);
     } else if (master.get_digital(DIGITAL_DOWN)) {
-      intake.move(-127);
+      lift.move(-127);
     } else {
-      intake.move(0);
+      lift.move(0);
     }
     }
 }
