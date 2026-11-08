@@ -1,6 +1,6 @@
 # VEX V5 robot code
 
-This PROS C++ project controls a four-motor VEX V5 drivetrain, a claw (夹取机构), and a two-motor lift. It uses EZ-Template for driver control, PID tuning, and autonomous routines.
+This PROS C++ project controls a four-motor VEX V5 drivetrain, a claw, and a two-motor lift. It uses EZ-Template for driver control, PID tuning, and autonomous routines.
 
 ## Current status
 
