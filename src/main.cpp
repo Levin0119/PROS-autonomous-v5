@@ -1,4 +1,5 @@
 #include "main.h"
+#include "lift_control.hpp"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -32,6 +33,8 @@ ez::tracking_wheel vert_tracker(-19, 2, 4.0);   // This tracking wheel is parall
 void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
+
+  lift_control::initialize();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
@@ -90,7 +93,7 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {
-  // . . .
+  lift_control::stop();
 }
 
 /**
@@ -118,6 +121,7 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+  lift_control::stop();
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
@@ -246,6 +250,7 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  lift_control::begin_driver();
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
@@ -268,14 +273,9 @@ void opcontrol() {
     } else {
      intake.move(0);
     }
-    pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
-    // lift control button up/down
-    if (master.get_digital(DIGITAL_UP)) {
-      lift.move(127);
-    } else if (master.get_digital(DIGITAL_DOWN)) {
-      lift.move(-127);
-    } else {
-      lift.move(0);
-    }
-    }
+    lift_control::update(!chassis.pid_tuner_enabled() &&
+                         !(master.get_digital(DIGITAL_B) &&
+                           master.get_digital(DIGITAL_DOWN)));
+    pros::delay(ez::util::DELAY_TIME);
+  }
 }
