@@ -245,7 +245,7 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-
+  lift.set_brake_mode(MOTOR_BRAKE_BRAKE);
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
