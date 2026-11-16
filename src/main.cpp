@@ -245,7 +245,7 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  lift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+  lift.set_brake_mode_all(MOTOR_BRAKE_BRAKE);
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
@@ -265,7 +265,7 @@ void opcontrol() {
     } else if (master.get_digital(DIGITAL_R2)) {
      intake.move(-30);
     } else {
-     intake.move(0);
+     intake.brake();
     }
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     // lift control button up/down
@@ -274,7 +274,7 @@ void opcontrol() {
     } else if (master.get_digital(DIGITAL_DOWN)) {
       lift.move(-127);
     } else {
-      lift.move(0);
+      lift.brake();
     }
     }
 }
