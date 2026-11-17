@@ -1,10 +1,12 @@
 #include "main.h"
 
 /////
-// For installation, upgrading, documentations, and tutorials, check out our website!
-// https://ez-robotics.github.io/EZ-Template/
+// For installation, upgrading, documentations, and tutorials, check out https://ez-robotics.github.io/EZ-Template/
 /////
-
+// Variables used for the claw control
+constexpr double CLAW_CLOSED = 0.0;
+constexpr double CLAW_OPEN = -90.0;
+constexpr int CLAW_SPEED = 66.7;  // RPM
 // Chassis constructor
 ez::Drive chassis(
     {-13, -14},     // Left Chassis Ports (negative port will reverse)
@@ -33,7 +35,10 @@ void initialize() {
   ez::ez_template_print();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
-
+// Start with the claw physically at your chosen closed reference.
+  intake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+  intake.tare_position();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
@@ -259,13 +264,11 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-    // claw control button R1/R2
-    if (master.get_digital(DIGITAL_R1)) {
-     intake.move(30);
-    } else if (master.get_digital(DIGITAL_R2)) {
-     intake.move(-30);
-    } else {
-     intake.brake();
+    // claw control button L1/L2
+    if (master.get_digital_new_press(DIGITAL_L1)) {
+      intake.move_absolute(CLAW_CLOSED, CLAW_SPEED);
+    } else if (master.get_digital_new_press(DIGITAL_L2)) {
+      intake.move_absolute(CLAW_OPEN, CLAW_SPEED);
     }
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     // lift control button up/down
