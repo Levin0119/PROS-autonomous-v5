@@ -275,7 +275,7 @@ void opcontrol() {
     if (master.get_digital(DIGITAL_UP)) {
       lift.move(127);
     } else if (master.get_digital(DIGITAL_DOWN)) {
-      lift.move(-127);
+      lift.move(-90);
     } else {
       lift.brake();
     }
