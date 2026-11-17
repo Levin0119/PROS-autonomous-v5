@@ -282,6 +282,10 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
+    // lift zeroing button Y
+    if (master.get_digital_new_press(DIGITAL_Y)) {
+      zeroLift();
+    }
     // claw control button L1/L2
     if (master.get_digital_new_press(DIGITAL_L1)) {
       claw.move_absolute(CLAW_CLOSED, CLAW_SPEED);
