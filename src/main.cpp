@@ -36,9 +36,9 @@ void initialize() {
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 // Start with the claw physically at your chosen closed reference.
-  intake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-  intake.tare_position();
-  intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); // Set the claw to hold its position when no power is applied
+  claw.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+  claw.tare_position();
+  claw.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); // Set the claw to hold its position when no power is applied
   lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD); // Set the lift to hold its position when no power is applied
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
@@ -88,7 +88,25 @@ void initialize() {
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
+// Initialize lift zero position
+void zeroLift() {
+  lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
+  lift.set_encoder_units_all(pros::E_MOTOR_ENCODER_DEGREES);
 
+  // Reverse at 100% speed: 100 RPM for red, 200 for green, 600 for blue.
+  lift.move_velocity(-200);
+
+  pros::delay(300);  // Wait 0.3 seconds
+
+  // PROS uses milliamps; add both lift motors' currents.
+  while (lift.get_current_draw(0) + lift.get_current_draw(1) <= 5000) {
+    pros::delay(10);
+  }
+
+  lift.brake();              // Stop pushing against the bottom
+  lift.tare_position_all(); // Set both motor positions to 0
+  master.rumble("-");        // Long vibration to indicate the lift is zeroed
+}
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
@@ -266,9 +284,9 @@ void opcontrol() {
     // . . .
     // claw control button L1/L2
     if (master.get_digital_new_press(DIGITAL_L1)) {
-      intake.move_absolute(CLAW_CLOSED, CLAW_SPEED);
+      claw.move_absolute(CLAW_CLOSED, CLAW_SPEED);
     } else if (master.get_digital_new_press(DIGITAL_L2)) {
-      intake.move_absolute(CLAW_OPEN, CLAW_SPEED);
+      claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
     }
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     // lift control button up/down

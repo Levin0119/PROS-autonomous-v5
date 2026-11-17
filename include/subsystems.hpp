@@ -7,6 +7,6 @@ extern Drive chassis;
 
 // Your motors, sensors, etc. should go here.  Below are examples
 
-inline pros::Motor intake(15);
+inline pros::Motor claw(15);
 inline pros::MotorGroup lift({1, -2});
 // inline pros::adi::DigitalIn limit_switch('A');
