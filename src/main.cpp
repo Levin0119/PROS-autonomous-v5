@@ -269,6 +269,7 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  bool liftPresetActive = false; // Variable to track if the lift is in preset mode
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
@@ -282,10 +283,6 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-    // lift zeroing button Y
-    if (master.get_digital_new_press(DIGITAL_Y)) {
-      zeroLift();
-    }
     // claw control button L1/L2
     if (master.get_digital_new_press(DIGITAL_L1)) {
       claw.move_absolute(CLAW_CLOSED, CLAW_SPEED);
@@ -293,12 +290,28 @@ void opcontrol() {
       claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
     }
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
-    // lift control button up/down
-    if (master.get_digital(DIGITAL_UP)) {
+    // lift zeroing button up + x
+    if (master.get_digital_new_press(DIGITAL_UP) && master.get_digital(DIGITAL_X)) {
+      liftPresetActive = false;
+      zeroLift();
+    } // lift control button up/down
+      else if (master.get_digital(DIGITAL_UP)) {
+      liftPresetActive = false;
       lift.move(127);
     } else if (master.get_digital(DIGITAL_DOWN)) {
+      liftPresetActive = false;
       lift.move(-90);
-    } else {
+    } // lift presets
+     else if (master.get_digital_new_press(DIGITAL_Y)) {
+      liftPresetActive = true;
+      lift.move_absolute(10.0, 100);  // Target: 30 degrees
+    } else if (master.get_digital_new_press(DIGITAL_A)) {
+      liftPresetActive = false;
+      lift.move_voltage(-8000);  // Lower at 8 V
+      pros::delay(200);          // Wait 0.2 seconds
+      claw.move_absolute(CLAW_OPEN, CLAW_SPEED);  // Open your motorized claw
+      lift.brake();             // Stop and hold the lift
+    } else if (!liftPresetActive) {
       lift.brake();
     }
     }
