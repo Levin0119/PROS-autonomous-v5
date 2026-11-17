@@ -38,7 +38,8 @@ void initialize() {
 // Start with the claw physically at your chosen closed reference.
   intake.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
   intake.tare_position();
-  intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); // Set the claw to hold its position when no power is applied
+  lift.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD); // Set the lift to hold its position when no power is applied
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
@@ -250,7 +251,6 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  lift.set_brake_mode_all(MOTOR_BRAKE_BRAKE);
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
