@@ -3,10 +3,7 @@
 /////
 // For installation, upgrading, documentations, and tutorials, check out https://ez-robotics.github.io/EZ-Template/
 /////
-// Variables used for the claw control
-constexpr double CLAW_CLOSED = 0.0;
-constexpr double CLAW_OPEN = 67.0;
-constexpr int CLAW_SPEED = 66.7;  // RPM
+
 // Chassis constructor
 ez::Drive chassis(
     {-13, -14},     // Left Chassis Ports (negative port will reverse)

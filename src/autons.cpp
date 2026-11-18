@@ -385,6 +385,7 @@ void my_forward() {
 void my_leftGoal() {
   chassis.pid_drive_set(19_in, 80, true);
   chassis.pid_wait();
+  claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
   chassis.pid_drive_set(-9_in, 40, true);
   chassis.pid_wait();
   chassis.pid_turn_set(-100_deg, 80);
@@ -403,6 +404,7 @@ void my_leftGoal() {
 void my_rightGoal() {
   chassis.pid_drive_set(19_in, 80, true);
   chassis.pid_wait();
+  claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
   chassis.pid_drive_set(-9_in, 40, true);
   chassis.pid_wait();
   chassis.pid_turn_set(100_deg, 80);
