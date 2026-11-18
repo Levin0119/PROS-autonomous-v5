@@ -21,3 +21,5 @@ void my_forward();
 void my_leftGoal();
 void my_rightGoal();
 void my_test();
+
+void skills_start_points();

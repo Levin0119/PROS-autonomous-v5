@@ -78,6 +78,7 @@ void initialize() {
       {"My Forward\n\nForward Left taggled", my_leftGoal},
       {"My Forward\n\nForward Right taggled", my_rightGoal},
       {"My Forward\n\nt1", my_test},      
+      {"Skills Starts\n\nVisit path starts 1, 2, 3. Begin at (-9.893, -169.491) cm, face 0 deg.", skills_start_points},
   });
 
   // Initialize chassis and auton selector

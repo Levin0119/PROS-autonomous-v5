@@ -424,18 +424,83 @@ void my_rightGoal() {
   chassis.pid_wait();
 }
 void my_test() {
-  chassis.pid_drive_set(19_in, 80, true);
+  chassis.pid_drive_set(5_in, 80, true);
   chassis.pid_wait();
-  chassis.pid_drive_set(-12_in, 40, true);
+}
+
+namespace {
+// Move to a path's start using the CURRENT odometry position, then face along
+// that path. Coordinates use centimeters; EZ converts the unit literals.
+bool go_to_skills_start(ez::united_pose target, okapi::QAngle heading) {
+  chassis.pid_turn_set(target, ez::fwd, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(-125_deg, 80);
+  if (chassis.interfered) {
+    chassis.drive_mode_set(ez::DISABLE);
+    return false;
+  }
+
+  chassis.pid_odom_set(ez::united_odom{target, ez::fwd, 70}, true);
   chassis.pid_wait();
-  chassis.pid_drive_set(11_in, 80, true);
+  if (chassis.interfered) {
+    chassis.drive_mode_set(ez::DISABLE);
+    return false;
+  }
+
+  chassis.pid_turn_set(heading, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_drive_set(-10_in, 40, true);
+  chassis.drive_mode_set(ez::DISABLE);
+  return !chassis.interfered;
+}
+}  // namespace
+
+// Visit only the three starting points from "skill auton.txt", in export order.
+// Physically place the robot at Path 1's start facing +Y (0 degrees).
+// Coordinates are relative to FIELD CENTER, +X right and +Y up.
+// Add your PID path movements in the three marked sections below. Keep field
+// odometry/IMU coordinates intact so the next transfer uses your actual pose.
+// Until those sections are filled in, this only drives between starting points.
+void skills_start_points() {
+  chassis.odom_xyt_set(-1.783_cm, -165.776_cm, 0_deg);
+  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);
+  // 1.783,-165.776,120,-50
+  // PATH 1 START: (-9.893, -169.491) cm, facing 0 degrees. Already here.
+  // TODO: YOUR PATH 1 PID CODE HERE (finish each motion with chassis.pid_wait()).
+  chassis.pid_drive_set(19_in, 70, true);
   chassis.pid_wait();
-  chassis.pid_drive_set(11_in, 80, true);
+  pros::delay(500);
+  lift.move_absolute(32.0, 50);
+  pros::delay(200);
+  claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
+  pros::delay(500);
+  chassis.pid_drive_set(-9_in, 40, true);
+  chassis.pid_wait();
+  chassis.pid_turn_set(120_deg, 80);
+  chassis.pid_wait();
+  chassis.pid_drive_set(12_in, 80, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-10_in, 90, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
   chassis.pid_drive_set(-9_in, 80, true);
   chassis.pid_wait();
+  // Straight transfer from wherever your Path 1 code finishes to Path 2's start.
+  if (!go_to_skills_start({-48.105_cm, -64.939_cm}, -50_deg)) return;
+
+  // PATH 2 START: (-48.105, -64.939) cm, facing down-left along Path 2.
+  // TODO: YOUR PATH 2 PID CODE HERE (finish each motion with chassis.pid_wait()).
+  chassis.pid_drive_set(12_in, 50, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-9_in, 50, true);
+  chassis.pid_wait();
+  // Straight transfer from wherever your Path 2 code finishes to Path 3's start.
+  if (!go_to_skills_start({-106.484_cm, -118.011_cm}, -100_deg)) return;
+  chassis.pid_drive_set(-9_in, 50, true);
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, 50);
+  chassis.pid_wait();
+  // PATH 3 START: (-106.484, -118.011) cm, facing right along Path 3.
+  // TODO: YOUR PATH 3 PID CODE HERE (finish each motion with chassis.pid_wait()).
+
+  chassis.drive_mode_set(ez::DISABLE);
 }
