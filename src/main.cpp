@@ -5,7 +5,7 @@
 /////
 // Variables used for the claw control
 constexpr double CLAW_CLOSED = 0.0;
-constexpr double CLAW_OPEN = -90.0;
+constexpr double CLAW_OPEN = 67.0;
 constexpr int CLAW_SPEED = 66.7;  // RPM
 // Chassis constructor
 ez::Drive chassis(
@@ -304,11 +304,11 @@ void opcontrol() {
     } // lift presets
      else if (master.get_digital_new_press(DIGITAL_Y)) {
       liftPresetActive = true;
-      lift.move_absolute(10.0, 100);  // Target: 30 degrees
+      lift.move_absolute(30.0, 100);  // Target: 30 degrees
     } else if (master.get_digital_new_press(DIGITAL_A)) {
       liftPresetActive = false;
       lift.move_voltage(-8000);  // Lower at 8 V
-      pros::delay(200);          // Wait 0.2 seconds
+      pros::delay(150);          // Wait 0.2 seconds
       claw.move_absolute(CLAW_OPEN, CLAW_SPEED);  // Open your motorized claw
       lift.brake();             // Stop and hold the lift
     } else if (!liftPresetActive) {
