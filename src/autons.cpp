@@ -383,9 +383,10 @@ void my_forward() {
   chassis.pid_wait();
 }
 void my_leftGoal() {
-  chassis.pid_drive_set(19_in, 80, true);
+  chassis.pid_drive_set(19_in, 70, true);
   chassis.pid_wait();
-  pros::delay(500);
+  lift.move_absolute(32.0, 50);
+  pros::delay(200);
   claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
   pros::delay(500);
   chassis.pid_drive_set(-9_in, 40, true);
@@ -394,7 +395,7 @@ void my_leftGoal() {
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
-  chassis.pid_drive_set(-10_in, 40, true);
+  chassis.pid_drive_set(-10_in, 90, true);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
@@ -402,9 +403,11 @@ void my_leftGoal() {
   chassis.pid_wait();
 }
 void my_rightGoal() {
-  chassis.pid_drive_set(19_in, 80, true);
+  chassis.pid_drive_set(19_in, 70, true);
   chassis.pid_wait();
   pros::delay(500);
+  lift.move_absolute(32.0, 50);
+  pros::delay(200);
   claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
   pros::delay(500);
   chassis.pid_drive_set(-9_in, 40, true);
@@ -413,7 +416,7 @@ void my_rightGoal() {
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
-  chassis.pid_drive_set(-10_in, 40, true);
+  chassis.pid_drive_set(-10_in, 90, true);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
