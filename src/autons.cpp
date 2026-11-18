@@ -385,16 +385,16 @@ void my_forward() {
 void my_leftGoal() {
   chassis.pid_drive_set(19_in, 80, true);
   chassis.pid_wait();
+  pros::delay(500);
   claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
+  pros::delay(500);
   chassis.pid_drive_set(-9_in, 40, true);
   chassis.pid_wait();
-  chassis.pid_turn_set(-100_deg, 80);
+  chassis.pid_turn_set(-120_deg, 80);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
   chassis.pid_drive_set(-10_in, 40, true);
-  chassis.pid_wait();
-  chassis.pid_swing_relative_set(ez::LEFT_SWING, -30_deg, 30);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
@@ -404,16 +404,16 @@ void my_leftGoal() {
 void my_rightGoal() {
   chassis.pid_drive_set(19_in, 80, true);
   chassis.pid_wait();
+  pros::delay(500);
   claw.move_absolute(CLAW_OPEN, CLAW_SPEED);
+  pros::delay(500);
   chassis.pid_drive_set(-9_in, 40, true);
   chassis.pid_wait();
-  chassis.pid_turn_set(100_deg, 80);
+  chassis.pid_turn_set(120_deg, 80);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
   chassis.pid_drive_set(-10_in, 40, true);
-  chassis.pid_wait();
-  chassis.pid_swing_relative_set(ez::LEFT_SWING, 30_deg, 30);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, 80, true);
   chassis.pid_wait();
